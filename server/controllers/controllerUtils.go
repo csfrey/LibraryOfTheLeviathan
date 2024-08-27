@@ -37,6 +37,16 @@ func GetUserModelFromObjectID(c *fiber.Ctx, userObjectID *primitive.ObjectID) (*
 	return &user, nil
 }
 
+// func GetUserModelFromStringID(c *fiber.Ctx, ID string) (*database.User, error) {
+// 	userObjectId, _ := primitive.ObjectIDFromHex(ID)
+
+// 	var user database.User
+// 	if err := database.Users.FindOne(c.Context(), bson.M{"_id": userObjectID}).Decode(&user); err != nil {
+// 		c.Status(fiber.StatusNotFound)
+// 		return nil, err
+// 	}
+// 	return &user, nil}
+
 func GetUserModelFromJWT(c *fiber.Ctx) (*database.User, error) {
 	userObjectID, err := GetUserObjectIDFromJWT(c)
 	if err != nil {

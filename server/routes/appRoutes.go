@@ -8,4 +8,5 @@ import (
 
 func AppRoutes(app *fiber.App) {
 	app.Get("/api/users", controllers.GetUsers)
+	app.Put("/api/user/:id", controllers.UpdateUser)
 }
