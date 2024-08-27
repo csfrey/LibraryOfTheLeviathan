@@ -44,7 +44,7 @@ const AuthContext = createContext<{
   user: null,
   previousPage: "/",
   setPreviousPage: () => {
-    console.error("Pervious page not initialized");
+    console.error("Previous page not initialized");
   },
   getCurrentUser: null,
   register: null,
@@ -64,11 +64,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const getCurrentUserMutation = useMutation({
     mutationKey: ["getCurrentUser"],
     mutationFn: async () => {
-      console.log("fetching current user");
-      const response = await axios.get(`${BASE}/api/current_user`, {
+      const response = await axios.get(`${BASE}/api/user/current`, {
         withCredentials: true,
       });
-      console.log("/api/current_user response:", response.data);
       if (response.status === 200) {
         setUser(response.data as User);
       } else {
@@ -94,7 +92,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email: string;
       password: string;
     }) => {
-      const response = axios.post(`${BASE}/api/register`, {
+      const response = axios.post(`${BASE}/api/user/register`, {
         name,
         email,
         password,
@@ -124,7 +122,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       password: string;
     }) => {
       const response = axios.post(
-        `${BASE}/api/login`,
+        `${BASE}/api/user/login`,
         {
           email,
           password,
@@ -136,7 +134,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return response;
     },
     onSuccess: (data) => {
-      console.log("Login success: ", data);
       getCurrentUserMutation.mutate();
 
       window.location.href = previousPage;
@@ -147,7 +144,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     mutationKey: ["logout"],
     mutationFn: () => {
       const response = axios.post(
-        `${BASE}/api/logout`,
+        `${BASE}/api/user/logout`,
         {},
         {
           withCredentials: true,

@@ -186,3 +186,61 @@ func SelfUpdateUser(c *fiber.Ctx) error {
 
 	return c.JSON(result)
 }
+
+// Expects fields "current_password" and "new_password"
+func ChangePassword(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+
+	token, err := jwt.ParseWithClaims(cookie, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("AUTH_SECRET")), nil
+	})
+
+	if err != nil || !token.Valid {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
+
+	claims := token.Claims
+	issuer, _ := claims.GetIssuer()
+	userObjectID, _ := primitive.ObjectIDFromHex(issuer)
+
+	var user database.User
+
+	if err := database.Users.FindOne(c.Context(), bson.M{"_id": userObjectID}).Decode(&user); err != nil {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "User not found",
+		})
+	}
+
+	var data map[string]string
+
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
+	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data["current_password"])); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "Incorrect password",
+		})
+	}
+
+	password, _ := bcrypt.GenerateFromPassword([]byte(data["new_password"]), 14)
+
+	update := bson.M{"$set": bson.M{
+		"password": password,
+	}}
+
+	result, err := database.Users.UpdateByID(c.Context(), userObjectID, update)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map{
+			"message": "Update failed",
+		})
+	}
+
+	return c.JSON(result)
+}
