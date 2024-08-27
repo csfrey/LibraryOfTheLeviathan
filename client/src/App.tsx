@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./components/ui/dropdown-menu";
+import AdminConsole from "./pages/AdminConsole";
 
 function App() {
   const { user, setPreviousPage, logout } = useAuth();
@@ -88,6 +89,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/not-authorized" element={<NotAuthorized />} />
+            <Route path="/admin" element={<AdminConsole />} />
           </Routes>
         </main>
       </div>
