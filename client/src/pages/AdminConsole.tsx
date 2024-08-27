@@ -22,10 +22,20 @@ const UserRow = ({ user, onError }: { user: any; onError: Function }) => {
 
       return result.data;
     },
-    onSuccess: () => {
-      setNotSaved(false);
-    },
+    onSuccess: () => setNotSaved(false),
     onError: () => onError(`Failed to update user with ID ${user._id}`),
+  });
+
+  const deleteUser = useMutation({
+    mutationKey: ["deleteUser", user.email],
+    mutationFn: async () => {
+      const result = await axios.delete(`${API_BASE}/api/user/${user._id}`, {
+        withCredentials: true,
+      });
+      return result.data;
+    },
+    onSuccess: () => window.location.reload(),
+    onError: () => onError(`Failed to delete user with ID ${user._id}`),
   });
 
   function handleRoleChange(e: any) {
@@ -68,7 +78,11 @@ const UserRow = ({ user, onError }: { user: any; onError: Function }) => {
         >
           SAVE
         </button>
-        <button type="button" className="text-red-500 hover:text-red-700">
+        <button
+          type="button"
+          className="text-red-500 hover:text-red-700"
+          onClick={() => deleteUser.mutate()}
+        >
           DELETE
         </button>
         <div className="w-4 h-4">

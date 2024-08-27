@@ -77,3 +77,33 @@ func UpdateUser(c *fiber.Ctx) error {
 
 	return c.JSON(result)
 }
+
+func DeleteUser(c *fiber.Ctx) error {
+	admin, err := GetUserModelFromJWT(c)
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"message": "Failed to get user",
+		})
+	}
+
+	if admin.Role != "admin" {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "Insufficient privileges",
+		})
+	}
+
+	deleteID := c.Params("id")
+	deleteObjectID, _ := primitive.ObjectIDFromHex(deleteID)
+
+	result, err := database.Users.DeleteOne(c.Context(), bson.M{
+		"_id": deleteObjectID,
+	})
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"message": "Delete user failed",
+		})
+	}
+
+	return c.JSON(result)
+}
