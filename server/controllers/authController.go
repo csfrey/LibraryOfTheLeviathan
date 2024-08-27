@@ -9,7 +9,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -117,29 +116,11 @@ func Logout(c *fiber.Ctx) error {
 }
 
 func CurrentUser(c *fiber.Ctx) error {
-	cookie := c.Cookies("jwt")
+	user, err := GetUserModelFromJWT(c)
 
-	token, err := jwt.ParseWithClaims(cookie, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("AUTH_SECRET")), nil
-	})
-
-	if err != nil || !token.Valid {
-		c.Status(fiber.StatusUnauthorized)
+	if err != nil {
 		return c.JSON(fiber.Map{
-			"message": "Unauthorized",
-		})
-	}
-
-	claims := token.Claims
-	issuer, _ := claims.GetIssuer()
-	userObjectID, _ := primitive.ObjectIDFromHex(issuer)
-
-	var user database.User
-
-	if err := database.Users.FindOne(c.Context(), bson.M{"_id": userObjectID}).Decode(&user); err != nil {
-		c.Status(fiber.StatusUnauthorized)
-		return c.JSON(fiber.Map{
-			"message": "User not found",
+			"message": "Failed to find user",
 		})
 	}
 
@@ -148,24 +129,12 @@ func CurrentUser(c *fiber.Ctx) error {
 
 // only accepts name
 func SelfUpdateUser(c *fiber.Ctx) error {
-	// Check auth status of JWT
-	cookie := c.Cookies("jwt")
-
-	token, err := jwt.ParseWithClaims(cookie, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("AUTH_SECRET")), nil
-	})
-
-	if err != nil || !token.Valid {
-		c.Status(fiber.StatusUnauthorized)
+	userObjectID, err := GetUserObjectIDFromJWT(c)
+	if err != nil {
 		return c.JSON(fiber.Map{
-			"message": "Unauthorized",
+			"message": "Failed to get User ID from JWT",
 		})
 	}
-
-	// Find user by JWT Issuer (a.k.a. user ID)
-	claims := token.Claims
-	issuer, _ := claims.GetIssuer()
-	userObjectID, _ := primitive.ObjectIDFromHex(issuer)
 
 	var data map[string]string
 	if err := c.BodyParser(&data); err != nil {
@@ -189,38 +158,17 @@ func SelfUpdateUser(c *fiber.Ctx) error {
 
 // Expects fields "current_password" and "new_password"
 func ChangePassword(c *fiber.Ctx) error {
-	cookie := c.Cookies("jwt")
-
-	token, err := jwt.ParseWithClaims(cookie, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("AUTH_SECRET")), nil
-	})
-
-	if err != nil || !token.Valid {
-		c.Status(fiber.StatusUnauthorized)
+	user, err := GetUserModelFromJWT(c)
+	if err != nil {
 		return c.JSON(fiber.Map{
-			"message": "Unauthorized",
-		})
-	}
-
-	claims := token.Claims
-	issuer, _ := claims.GetIssuer()
-	userObjectID, _ := primitive.ObjectIDFromHex(issuer)
-
-	var user database.User
-
-	if err := database.Users.FindOne(c.Context(), bson.M{"_id": userObjectID}).Decode(&user); err != nil {
-		c.Status(fiber.StatusUnauthorized)
-		return c.JSON(fiber.Map{
-			"message": "User not found",
+			"message": "Failed to find user",
 		})
 	}
 
 	var data map[string]string
-
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-
 	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data["currentPassword"])); err != nil {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
@@ -233,8 +181,7 @@ func ChangePassword(c *fiber.Ctx) error {
 	update := bson.M{"$set": bson.M{
 		"password": password,
 	}}
-
-	result, err := database.Users.UpdateByID(c.Context(), userObjectID, update)
+	result, err := database.Users.UpdateByID(c.Context(), user.ID, update)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
 		return c.JSON(fiber.Map{

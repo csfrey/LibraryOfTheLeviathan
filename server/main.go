@@ -34,6 +34,9 @@ func main() {
 	routes.AuthRoutes(app)
 	fmt.Println("Auth routes set up.")
 
+	routes.AppRoutes(app)
+	fmt.Println("App routes set up.")
+
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	app.Listen(fmt.Sprintf(":%d", port))
 }
