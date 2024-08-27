@@ -81,7 +81,7 @@ function App() {
             )}
           </div>
         </header>
-        <main className="px-8 py-6">
+        <main className="px-24 py-6">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />

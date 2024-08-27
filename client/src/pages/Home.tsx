@@ -17,18 +17,21 @@ const Home = () => {
         illegal activity, but ultimately, how you obtain that source is up to
         you. All content hosted on this site is protected under Fair Use.
       </div>
+
       <div className="grid grid-cols-4 gap-6 text-black font-brand">
         {categories.map((category, i) => (
-          <Link key={category.name} to={category.name}>
-            <div className="p-2 rounded-xl border border-black bg-white h-full drop-shadow shadow hover:shadow-lg">
-              <div className="flex mb-4">
-                <span className="absolute border-2 border-black bg-white rounded-full p-2 drop-shadow shadow-lg -translate-x-4 -translate-y-4">
-                  {category.icon}
-                </span>
-                <h2 className="ml-14 text-3xl">{category.display}</h2>
-              </div>
-              <p>{category.description}</p>
+          <Link
+            key={category.name}
+            to={category.name}
+            className="p-2 rounded-xl border border-black bg-white h-full drop-shadow shadow hover:shadow-lg"
+          >
+            <div className="flex mb-4">
+              <span className="absolute border-2 border-black bg-white rounded-full p-2 drop-shadow shadow-lg -translate-x-4 -translate-y-4">
+                {category.icon}
+              </span>
+              <h2 className="ml-14 text-3xl">{category.display}</h2>
             </div>
+            <p>{category.description}</p>
           </Link>
         ))}
       </div>

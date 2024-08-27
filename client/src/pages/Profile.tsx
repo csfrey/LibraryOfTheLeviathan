@@ -52,7 +52,7 @@ const Profile = () => {
   });
 
   if (!getCurrentUser?.isPending && !user) {
-    navigate("/not-authorized");
+    navigate("/");
   }
 
   const passwordMessage = changePassword.isPending
