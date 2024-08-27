@@ -2,8 +2,7 @@ import { createContext, useEffect, useState, useContext } from "react";
 import { User } from "../types";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
-
-const BASE = import.meta.env.VITE_API_BASE_URL;
+import { API_BASE } from "@/constants";
 
 const AuthContext = createContext<{
   user: User | null;
@@ -64,7 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const getCurrentUserMutation = useMutation({
     mutationKey: ["getCurrentUser"],
     mutationFn: async () => {
-      const response = await axios.get(`${BASE}/api/user/current`, {
+      const response = await axios.get(`${API_BASE}/api/user/current`, {
         withCredentials: true,
       });
       if (response.status === 200) {
@@ -92,7 +91,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email: string;
       password: string;
     }) => {
-      const response = axios.post(`${BASE}/api/user/register`, {
+      const response = axios.post(`${API_BASE}/api/user/register`, {
         name,
         email,
         password,
@@ -122,7 +121,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       password: string;
     }) => {
       const response = axios.post(
-        `${BASE}/api/user/login`,
+        `${API_BASE}/api/user/login`,
         {
           email,
           password,
@@ -144,7 +143,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     mutationKey: ["logout"],
     mutationFn: () => {
       const response = axios.post(
-        `${BASE}/api/user/logout`,
+        `${API_BASE}/api/user/logout`,
         {},
         {
           withCredentials: true,

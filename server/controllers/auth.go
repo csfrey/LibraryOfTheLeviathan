@@ -221,14 +221,14 @@ func ChangePassword(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data["current_password"])); err != nil {
+	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data["currentPassword"])); err != nil {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"message": "Incorrect password",
 		})
 	}
 
-	password, _ := bcrypt.GenerateFromPassword([]byte(data["new_password"]), 14)
+	password, _ := bcrypt.GenerateFromPassword([]byte(data["newPassword"]), 14)
 
 	update := bson.M{"$set": bson.M{
 		"password": password,
