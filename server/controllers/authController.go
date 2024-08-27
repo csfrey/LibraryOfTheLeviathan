@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"os"
 	"time"
 	"webapp/database"
@@ -13,7 +12,6 @@ import (
 )
 
 func Register(c *fiber.Ctx) error {
-	fmt.Println("Registering user.")
 	var data map[string]string
 
 	if err := c.BodyParser(&data); err != nil {
@@ -24,10 +22,7 @@ func Register(c *fiber.Ctx) error {
 	var user database.User
 
 	if err := database.Users.FindOne(c.Context(), bson.M{"email": data["email"]}).Decode(&user); err == nil {
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
-			"message": "Email already in use",
-		})
+		return fiber.NewError(fiber.StatusBadRequest, "Email already in use")
 	}
 
 	password, _ := bcrypt.GenerateFromPassword([]byte(data["password"]), 14)
@@ -40,7 +35,6 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	result, err := database.Users.InsertOne(c.Context(), user)
-	fmt.Println("Inserted user to database")
 
 	if err != nil {
 		return err
@@ -59,17 +53,14 @@ func Login(c *fiber.Ctx) error {
 	var user database.User
 
 	if err := database.Users.FindOne(c.Context(), bson.M{"email": data["email"]}).Decode(&user); err != nil {
-		c.Status(fiber.StatusNotFound)
+		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"message": "User not found",
 		})
 	}
 
 	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data["password"])); err != nil {
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
-			"message": "Incorrect password",
-		})
+		return fiber.NewError(fiber.StatusUnauthorized, "Username or password is incorrect")
 	}
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{

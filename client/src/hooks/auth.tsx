@@ -6,6 +6,7 @@ import { API_BASE } from "@/constants";
 
 const AuthContext = createContext<{
   user: User | null;
+  authError: string | null;
   previousPage: string;
   setPreviousPage: Function;
   getCurrentUser: UseMutationResult<
@@ -41,6 +42,7 @@ const AuthContext = createContext<{
   > | null;
 }>({
   user: null,
+  authError: null,
   previousPage: "/",
   setPreviousPage: () => {
     console.error("Previous page not initialized");
@@ -58,6 +60,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [previousPage, setPreviousPage] = useState<string>("/");
   const [user, setUser] = useState<User | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   // on page load, attempt to get the current user
   const getCurrentUserMutation = useMutation({
@@ -72,7 +75,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(null);
       }
 
-      return response;
+      return response.data;
     },
   });
 
@@ -91,18 +94,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email: string;
       password: string;
     }) => {
-      const response = axios.post(`${API_BASE}/api/user/register`, {
+      const response = await axios.post(`${API_BASE}/api/user/register`, {
         name,
         email,
         password,
       });
-      return response;
+      return response.data;
     },
     onSuccess: async (data, values) => {
       loginMutation.mutate({
         email: values.email,
         password: values.password,
       });
+      setAuthError(null);
+    },
+    onError: (error: any) => {
+      setAuthError(error.response.data);
     },
   });
 
@@ -132,10 +139,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       );
       return response;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       getCurrentUserMutation.mutate();
-
+      setAuthError(null);
       window.location.href = previousPage;
+    },
+    onError: (error: any) => {
+      setAuthError(error.response.data);
     },
   });
 
@@ -164,6 +174,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
+        authError,
         previousPage,
         setPreviousPage,
         getCurrentUser: getCurrentUserMutation,
