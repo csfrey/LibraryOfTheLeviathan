@@ -1,6 +1,17 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { getSortableHeader } from "../table/DomainTable";
-import { Adventure } from "./types";
+import {
+  Adventure,
+  Background,
+  Class,
+  Feat,
+  MagicItem,
+  Monster,
+  Race,
+  Retainer,
+  Spell,
+  Subclass,
+} from "./types";
 
 export type CollectionConfig = {
   name: string;
@@ -105,7 +116,7 @@ export const collectionsConfig: CollectionConfig[] = [
         header: "Summary",
         accessorKey: "summary",
       },
-    ],
+    ] as ColumnDef<Background>[],
   },
   {
     name: "classes",
@@ -128,6 +139,28 @@ export const collectionsConfig: CollectionConfig[] = [
         />
       </svg>
     ),
+    columns: [
+      {
+        // Name
+        header: getSortableHeader("Name"),
+        accessorKey: "name",
+      },
+      {
+        // Source
+        header: getSortableHeader("Source"),
+        accessorKey: "source",
+        accessorFn: (a) => `${a.source}, p.  ${a.page}`,
+      },
+      {
+        header: getSortableHeader("Subclasses"),
+        accessorKey: "subclasses",
+      },
+      {
+        // Summary
+        header: "Summary",
+        accessorKey: "summary",
+      },
+    ] as ColumnDef<Class>[],
   },
   {
     name: "feats",
@@ -150,6 +183,24 @@ export const collectionsConfig: CollectionConfig[] = [
         />
       </svg>
     ),
+    columns: [
+      {
+        // Name
+        header: getSortableHeader("Name"),
+        accessorKey: "name",
+      },
+      {
+        // Source
+        header: getSortableHeader("Source"),
+        accessorKey: "source",
+        accessorFn: (a) => `${a.source}, p.  ${a.page}`,
+      },
+      {
+        // Summary
+        header: "Summary",
+        accessorKey: "summary",
+      },
+    ] as ColumnDef<Feat>[],
   },
   {
     name: "magic-items",
@@ -172,6 +223,28 @@ export const collectionsConfig: CollectionConfig[] = [
         />
       </svg>
     ),
+    columns: [
+      {
+        // Name
+        header: getSortableHeader("Name"),
+        accessorKey: "name",
+      },
+      {
+        // Source
+        header: getSortableHeader("Source"),
+        accessorKey: "source",
+        accessorFn: (a) => `${a.source}, p.  ${a.page}`,
+      },
+      {
+        header: getSortableHeader("Rarity"),
+        accessorKey: "rarity",
+      },
+      {
+        // Summary
+        header: "Summary",
+        accessorKey: "summary",
+      },
+    ] as ColumnDef<MagicItem>[],
   },
   {
     name: "monsters",
@@ -194,6 +267,24 @@ export const collectionsConfig: CollectionConfig[] = [
         />
       </svg>
     ),
+    columns: [
+      {
+        // Name
+        header: getSortableHeader("Name"),
+        accessorKey: "name",
+      },
+      {
+        // Source
+        header: getSortableHeader("Source"),
+        accessorKey: "source",
+        accessorFn: (a) => `${a.source}, p.  ${a.page}`,
+      },
+      {
+        // Summary
+        header: "Summary",
+        accessorKey: "summary",
+      },
+    ] as ColumnDef<Monster>[],
   },
   {
     name: "races",
@@ -216,6 +307,24 @@ export const collectionsConfig: CollectionConfig[] = [
         />
       </svg>
     ),
+    columns: [
+      {
+        // Name
+        header: getSortableHeader("Name"),
+        accessorKey: "name",
+      },
+      {
+        // Source
+        header: getSortableHeader("Source"),
+        accessorKey: "source",
+        accessorFn: (a) => `${a.source}, p.  ${a.page}`,
+      },
+      {
+        // Summary
+        header: "Summary",
+        accessorKey: "summary",
+      },
+    ] as ColumnDef<Race>[],
   },
   {
     name: "retainers",
@@ -238,6 +347,24 @@ export const collectionsConfig: CollectionConfig[] = [
         />
       </svg>
     ),
+    columns: [
+      {
+        // Name
+        header: getSortableHeader("Name"),
+        accessorKey: "name",
+      },
+      {
+        // Source
+        header: getSortableHeader("Source"),
+        accessorKey: "source",
+        accessorFn: (a) => `${a.source}, p.  ${a.page}`,
+      },
+      {
+        // Summary
+        header: "Summary",
+        accessorKey: "summary",
+      },
+    ] as ColumnDef<Retainer>[],
   },
   {
     name: "spells",
@@ -265,6 +392,28 @@ export const collectionsConfig: CollectionConfig[] = [
         />
       </svg>
     ),
+    columns: [
+      {
+        // Name
+        header: getSortableHeader("Name"),
+        accessorKey: "name",
+      },
+      {
+        // Source
+        header: getSortableHeader("Source"),
+        accessorKey: "source",
+        accessorFn: (a) => `${a.source}, p.  ${a.page}`,
+      },
+      {
+        header: getSortableHeader("School of Magic"),
+        accessorKey: "schoolOfMagic",
+      },
+      {
+        // Summary
+        header: "Summary",
+        accessorKey: "summary",
+      },
+    ] as ColumnDef<Spell>[],
   },
   {
     name: "subclasses",
@@ -287,5 +436,27 @@ export const collectionsConfig: CollectionConfig[] = [
         />
       </svg>
     ),
+    columns: [
+      {
+        // Name
+        header: getSortableHeader("Name"),
+        accessorKey: "name",
+      },
+      {
+        // Source
+        header: getSortableHeader("Source"),
+        accessorKey: "source",
+        accessorFn: (a) => `${a.source}, p.  ${a.page}`,
+      },
+      {
+        header: getSortableHeader("Class"),
+        accessorKey: "parentClass",
+      },
+      {
+        // Summary
+        header: "Summary",
+        accessorKey: "summary",
+      },
+    ] as ColumnDef<Subclass>[],
   },
 ];

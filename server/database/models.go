@@ -53,6 +53,12 @@ type MagicItem struct {
 	Rarity string `bson:"rarity,omitempty"`
 }
 
+type Monster struct {
+	Domain
+
+	Challenge string `json:"challenge,omitempty" bson:"challenge,omitempty"`
+}
+
 type Race struct {
 	Domain
 }

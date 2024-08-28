@@ -35,6 +35,10 @@ export type MagicItem = Domain & {
   rarity: string;
 };
 
+export type Monster = Domain & {
+  challenge: string;
+};
+
 export type Race = Domain & {};
 
 export type Retainer = Domain & {};
