@@ -18,6 +18,7 @@ var (
 	CharacterClasses *mongo.Collection
 	Feats            *mongo.Collection
 	MagicItems       *mongo.Collection
+	Monsters         *mongo.Collection
 	Races            *mongo.Collection
 	Retainers        *mongo.Collection
 	Spells           *mongo.Collection
@@ -48,9 +49,10 @@ func Setup() *mongo.Client {
 	Users = Database.Collection("users")
 	Adventures = Database.Collection("adventures")
 	Backgrounds = Database.Collection("backgrounds")
-	CharacterClasses = Database.Collection("character_classes")
+	CharacterClasses = Database.Collection("classes")
 	Feats = Database.Collection("feats")
-	MagicItems = Database.Collection("magic_items")
+	MagicItems = Database.Collection("magicItems")
+	Monsters = Database.Collection("monsters")
 	Races = Database.Collection("races")
 	Retainers = Database.Collection("retainers")
 	Spells = Database.Collection("spells")

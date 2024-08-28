@@ -31,6 +31,70 @@ func GetCollection(c *fiber.Ctx) error {
 			}
 			cursor = newCursor
 		}
+	case "classes":
+		{
+			newCursor, err := database.CharacterClasses.Find(c.Context(), bson.M{})
+			if err != nil {
+				return fiber.NewError(fiber.StatusInternalServerError, "Failed to get the cursor")
+			}
+			cursor = newCursor
+		}
+	case "feats":
+		{
+			newCursor, err := database.Feats.Find(c.Context(), bson.M{})
+			if err != nil {
+				return fiber.NewError(fiber.StatusInternalServerError, "Failed to get the cursor")
+			}
+			cursor = newCursor
+		}
+	case "magic-items":
+		{
+			newCursor, err := database.MagicItems.Find(c.Context(), bson.M{})
+			if err != nil {
+				return fiber.NewError(fiber.StatusInternalServerError, "Failed to get the cursor")
+			}
+			cursor = newCursor
+		}
+	case "monsters":
+		{
+			newCursor, err := database.Monsters.Find(c.Context(), bson.M{})
+			if err != nil {
+				return fiber.NewError(fiber.StatusInternalServerError, "Failed to get the cursor")
+			}
+			cursor = newCursor
+		}
+	case "races":
+		{
+			newCursor, err := database.Races.Find(c.Context(), bson.M{})
+			if err != nil {
+				return fiber.NewError(fiber.StatusInternalServerError, "Failed to get the cursor")
+			}
+			cursor = newCursor
+		}
+	case "retainers":
+		{
+			newCursor, err := database.Retainers.Find(c.Context(), bson.M{})
+			if err != nil {
+				return fiber.NewError(fiber.StatusInternalServerError, "Failed to get the cursor")
+			}
+			cursor = newCursor
+		}
+	case "spells":
+		{
+			newCursor, err := database.Spells.Find(c.Context(), bson.M{})
+			if err != nil {
+				return fiber.NewError(fiber.StatusInternalServerError, "Failed to get the cursor")
+			}
+			cursor = newCursor
+		}
+	case "subclasses":
+		{
+			newCursor, err := database.Subclasses.Find(c.Context(), bson.M{})
+			if err != nil {
+				return fiber.NewError(fiber.StatusInternalServerError, "Failed to get the cursor")
+			}
+			cursor = newCursor
+		}
 	default:
 		return fiber.NewError(fiber.StatusNotFound, "No such collection")
 	}

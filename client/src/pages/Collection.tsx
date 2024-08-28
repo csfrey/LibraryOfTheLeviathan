@@ -7,6 +7,7 @@ import {
   Class,
   Feat,
   MagicItem,
+  Monster,
   Race,
   Spell,
   Subclass,
@@ -16,7 +17,6 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { collectionsConfig } from "@/components/config/collections";
 import { DomainTable } from "@/components/table/DomainTable";
-import { ColumnDef } from "@tanstack/react-table";
 
 const Collection = () => {
   const { name } = useParams();
@@ -54,8 +54,12 @@ const Collection = () => {
       data = (query?.data ?? []) as Feat[];
       break;
 
-    case "magicItems":
+    case "magic-items":
       data = (query?.data ?? []) as MagicItem[];
+      break;
+
+    case "monsters":
+      data = (query?.data ?? []) as Monster[];
       break;
 
     case "races":

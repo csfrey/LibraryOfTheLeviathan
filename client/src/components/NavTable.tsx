@@ -16,7 +16,9 @@ const NavTable = () => {
       <div className="max-h-min rounded bg-white shadow">
         <Table className="">
           <TableHeader className="border-b border-gray-400">
-            <TableHead className="text-xl">Collections</TableHead>
+            <TableRow>
+              <TableHead className="text-xl">Collections</TableHead>
+            </TableRow>
           </TableHeader>
           <TableBody>
             {collectionsConfig.map((c) => {
