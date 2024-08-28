@@ -1,8 +1,8 @@
 import { createContext, useEffect, useState, useContext } from "react";
-import { User } from "../types";
+import { User } from "../components/config/types";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
-import { API_BASE } from "@/constants";
+import { API_BASE } from "@/components/config/constants";
 
 const AuthContext = createContext<{
   user: User | null;

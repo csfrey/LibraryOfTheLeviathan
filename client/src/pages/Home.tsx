@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { collectionsConfig } from "../constants";
+import { collectionsConfig } from "@/components/config/collections";
 
 const Home = () => {
   return (
@@ -27,7 +27,7 @@ const Home = () => {
           >
             <div className="flex mb-4">
               <span className="absolute border-2 border-black bg-white rounded-full p-2 drop-shadow shadow-lg -translate-x-4 -translate-y-4">
-                {category.icon}
+                {category.icon("size-10")}
               </span>
               <h2 className="ml-14 text-3xl">{category.display}</h2>
             </div>

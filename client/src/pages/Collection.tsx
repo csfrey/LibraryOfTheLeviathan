@@ -1,8 +1,9 @@
+import { API_BASE } from "@/components/config/constants";
 import NavTable from "@/components/NavTable";
 import AdventuresTable from "@/components/table/AdventuresTable";
 import BackgroundsTable from "@/components/table/BackgroundsTable";
-import { API_BASE } from "@/constants";
-import { Adventure, Background } from "@/types";
+
+import { Adventure, Background } from "@/components/config/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";

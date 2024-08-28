@@ -1,8 +1,8 @@
-import { API_BASE } from "@/constants";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { CircleLoader } from "react-spinners";
 import axios from "axios";
 import { useState } from "react";
+import { API_BASE } from "@/components/config/constants";
 
 const UserRow = ({ user, onError }: { user: any; onError: Function }) => {
   const [notSaved, setNotSaved] = useState(false);

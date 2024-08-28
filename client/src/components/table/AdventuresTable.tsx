@@ -1,4 +1,4 @@
-import { Adventure } from "@/types";
+import { Adventure } from "@/components/config/types";
 import { DomainTable, getSortableHeader } from "./DataTable";
 import { ColumnDef } from "@tanstack/react-table";
 

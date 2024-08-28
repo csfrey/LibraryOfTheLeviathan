@@ -1,4 +1,4 @@
-import { Background } from "@/types";
+import { Background } from "@/components/config/types";
 import { DomainTable, getSortableHeader } from "./DataTable";
 import { ColumnDef } from "@tanstack/react-table";
 

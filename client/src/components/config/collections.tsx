@@ -1,19 +1,17 @@
-export const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
 export const collectionsConfig = [
   {
     name: "adventures",
     display: "Adventures",
     description:
       "Embark on epic quests filled with danger, mystery, and treasure, where your choices shape the fate of the realm",
-    icon: (
+    icon: (size: string) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-10"
+        className={size}
       >
         <path
           strokeLinecap="round"
@@ -28,14 +26,14 @@ export const collectionsConfig = [
     display: "Backgrounds",
     description:
       "Uncover the roots of your character's past and let it guide their destiny, from humble beginnings to legendary feats",
-    icon: (
+    icon: (size: string) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-10"
+        className={size}
       >
         <path
           strokeLinecap="round"
@@ -50,14 +48,14 @@ export const collectionsConfig = [
     display: "Classes",
     description:
       "Master the arts of combat, magic, and stealth, defining your role in the party and your path to glory",
-    icon: (
+    icon: (size: string) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-10"
+        className={size}
       >
         <path
           strokeLinecap="round"
@@ -72,14 +70,14 @@ export const collectionsConfig = [
     display: "Feats",
     description:
       "Enhance your abilities and unlock new powers with feats that showcase your character's unique talents and strengths",
-    icon: (
+    icon: (size: string) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-10"
+        className={size}
       >
         <path
           strokeLinecap="round"
@@ -94,14 +92,14 @@ export const collectionsConfig = [
     display: "Magic Items",
     description:
       "Discover enchanted relics and artifacts that hold untold power, waiting to be wielded by the worthy",
-    icon: (
+    icon: (size: string) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-10"
+        className={size}
       >
         <path
           strokeLinecap="round"
@@ -116,14 +114,14 @@ export const collectionsConfig = [
     display: "Monsters",
     description:
       "Face fearsome creatures and mythical beasts that challenge your courage and test your might at every turn",
-    icon: (
+    icon: (size: string) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-10"
+        className={size}
       >
         <path
           strokeLinecap="round"
@@ -138,14 +136,14 @@ export const collectionsConfig = [
     display: "Races",
     description:
       "Explore diverse ancestries with rich histories and unique traits that shape your character's identity and worldview",
-    icon: (
+    icon: (size: string) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-10"
+        className={size}
       >
         <path
           strokeLinecap="round"
@@ -160,14 +158,14 @@ export const collectionsConfig = [
     display: "Retainers",
     description:
       "Recruit loyal companions and allies who provide invaluable support and add depth to your adventures",
-    icon: (
+    icon: (size: string) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-10"
+        className={size}
       >
         <path
           strokeLinecap="round"
@@ -182,14 +180,14 @@ export const collectionsConfig = [
     display: "Spells",
     description:
       "Harness the arcane, divine, and natural forces of magic to unleash powerful spells that can turn the tide of battle.",
-    icon: (
+    icon: (size: string) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-10"
+        className={size}
       >
         <path
           strokeLinecap="round"
@@ -209,14 +207,14 @@ export const collectionsConfig = [
     display: "Subclasses",
     description:
       "Specialize your character with unique subclasses that offer new abilities and exciting ways to play",
-    icon: (
+    icon: (size: string) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-10"
+        className={size}
       >
         <path
           strokeLinecap="round"

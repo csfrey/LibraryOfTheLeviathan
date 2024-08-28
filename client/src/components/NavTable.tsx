@@ -1,3 +1,4 @@
+import { collectionsConfig } from "./config/collections";
 import {
   Table,
   TableBody,
@@ -7,7 +8,6 @@ import {
   TableRow,
 } from "./ui/table";
 import { Link, useLocation } from "react-router-dom";
-import { collectionsConfig } from "@/constants";
 
 const NavTable = () => {
   const location = useLocation();
@@ -24,7 +24,12 @@ const NavTable = () => {
               return (
                 <TableRow className="" key={c.name}>
                   <TableCell className="p-2">
-                    <Link to={loc}>{c.display}</Link>
+                    <Link to={loc}>
+                      <div className="flex items-center gap-2">
+                        {c.icon("size-5")}
+                        {c.display}
+                      </div>
+                    </Link>
                   </TableCell>
                 </TableRow>
               );

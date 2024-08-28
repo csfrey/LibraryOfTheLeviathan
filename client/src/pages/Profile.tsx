@@ -3,8 +3,9 @@ import { useAuth } from "../hooks/auth";
 import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { API_BASE } from "@/constants";
+
 import axios from "axios";
+import { API_BASE } from "@/components/config/constants";
 
 const Profile = () => {
   const [passwordMessageState, setPasswordMessageState] = useState("");
