@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "./components/ui/dropdown-menu";
 import AdminConsole from "./pages/AdminConsole";
+import Collection from "./pages/Collection";
 
 function App() {
   const { user, setPreviousPage, logout } = useAuth();
@@ -90,6 +91,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/not-authorized" element={<NotAuthorized />} />
             <Route path="/admin" element={<AdminConsole />} />
+            <Route path="/collection/:name" element={<Collection />} />
           </Routes>
         </main>
       </div>

@@ -37,6 +37,9 @@ func main() {
 	routes.AppRoutes(app)
 	fmt.Println("App routes set up.")
 
+	routes.DomainRoutes(app)
+	fmt.Println("Domain routes set up.")
+
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	app.Listen(fmt.Sprintf(":%d", port))
 }

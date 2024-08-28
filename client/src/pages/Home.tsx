@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { categories } from "../constants";
+import { collectionsConfig } from "../constants";
 
 const Home = () => {
   return (
@@ -19,10 +19,10 @@ const Home = () => {
       </div>
 
       <div className="grid grid-cols-4 gap-6 text-black font-brand">
-        {categories.map((category, i) => (
+        {collectionsConfig.map((category, i) => (
           <Link
             key={category.name}
-            to={category.name}
+            to={`/collection/${category.name}`}
             className="p-2 rounded-xl border border-black bg-white h-full drop-shadow shadow hover:shadow-lg"
           >
             <div className="flex mb-4">
