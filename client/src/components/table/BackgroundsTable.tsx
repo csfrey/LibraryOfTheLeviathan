@@ -1,15 +1,15 @@
-import { Adventure } from "@/types";
+import { Background } from "@/types";
 import { DomainTable, getSortableHeader } from "./DataTable";
 import { ColumnDef } from "@tanstack/react-table";
 
-const AdventuresTable = ({
+const BackgroundsTable = ({
   isFetching,
   data,
 }: {
   isFetching: boolean;
-  data: Adventure[];
+  data: Background[];
 }) => {
-  const columns: ColumnDef<Adventure>[] = [
+  const columns: ColumnDef<Background>[] = [
     {
       // Name
       header: getSortableHeader("Name"),
@@ -22,22 +22,6 @@ const AdventuresTable = ({
       accessorFn: (a) => `${a.source}, p.  ${a.page}`,
     },
     {
-      // Time to complete
-      header: getSortableHeader("Approx. Time"),
-      accessorKey: "timeToComplete",
-      accessorFn: (a) => `${a.timeToComplete} hours`,
-    },
-    {
-      // # of Characters
-      header: getSortableHeader("# of Characters"),
-      accessorKey: "numberOfCharacters",
-    },
-    {
-      // Level
-      header: getSortableHeader("Character Level"),
-      accessorKey: "levels",
-    },
-    {
       // Summary
       header: "Summary",
       accessorKey: "summary",
@@ -46,7 +30,7 @@ const AdventuresTable = ({
 
   return (
     <DomainTable
-      title="Adventures"
+      title="Backgrounds"
       isFetching={isFetching}
       columns={columns}
       data={data}
@@ -54,4 +38,4 @@ const AdventuresTable = ({
   );
 };
 
-export default AdventuresTable;
+export default BackgroundsTable;

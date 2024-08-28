@@ -1,8 +1,10 @@
 import {
   ColumnDef,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -18,6 +20,20 @@ import { Domain } from "@/types";
 import DefaultLoader from "../Loader";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { ArrowUpDown } from "lucide-react";
+
+export function getSortableHeader(header: string) {
+  return ({ column }: { column: any }) => (
+    <Button
+      variant="ghost"
+      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    >
+      {header}
+      <ArrowUpDown className="ml-2 h-4 w-4" />
+    </Button>
+  );
+}
 
 interface DomainTableProps<TData, TValue> {
   title: string;
@@ -33,11 +49,18 @@ export function DomainTable<TData extends Domain, TValue>({
   data,
 }: DomainTableProps<TData, TValue>) {
   const navigate = useNavigate();
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   });
 
   const Paginator = () => (

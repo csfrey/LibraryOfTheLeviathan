@@ -22,3 +22,5 @@ export type Adventure = Domain & {
   numberOfCharacters: number;
   levels: number;
 };
+
+export type Background = Domain & {};

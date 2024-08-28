@@ -23,6 +23,14 @@ func GetCollection(c *fiber.Ctx) error {
 			}
 			cursor = newCursor
 		}
+	case "backgrounds":
+		{
+			newCursor, err := database.Backgrounds.Find(c.Context(), bson.M{})
+			if err != nil {
+				return fiber.NewError(fiber.StatusInternalServerError, "Failed to get the cursor")
+			}
+			cursor = newCursor
+		}
 	default:
 		return fiber.NewError(fiber.StatusNotFound, "No such collection")
 	}

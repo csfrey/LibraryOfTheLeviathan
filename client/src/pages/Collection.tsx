@@ -1,7 +1,8 @@
 import NavTable from "@/components/NavTable";
 import AdventuresTable from "@/components/table/AdventuresTable";
+import BackgroundsTable from "@/components/table/BackgroundsTable";
 import { API_BASE } from "@/constants";
-import { Adventure } from "@/types";
+import { Adventure, Background } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -23,6 +24,13 @@ const Collection = () => {
           <AdventuresTable
             isFetching={query.isFetching}
             data={(query.data ?? []) as Adventure[]}
+          />
+        );
+      case "backgrounds":
+        return (
+          <BackgroundsTable
+            isFetching={query.isFetching}
+            data={(query.data ?? []) as Background[]}
           />
         );
 
