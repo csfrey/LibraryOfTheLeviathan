@@ -1,4 +1,16 @@
-export const collectionsConfig = [
+import { ColumnDef } from "@tanstack/react-table";
+import { getSortableHeader } from "../table/DomainTable";
+import { Adventure } from "./types";
+
+export type CollectionConfig = {
+  name: string;
+  display: string;
+  description: string;
+  icon: (size: string) => React.ReactNode;
+  columns: ColumnDef<any>[];
+};
+
+export const collectionsConfig: CollectionConfig[] = [
   {
     name: "adventures",
     display: "Adventures",
@@ -20,6 +32,40 @@ export const collectionsConfig = [
         />
       </svg>
     ),
+    columns: [
+      {
+        // Name
+        header: getSortableHeader("Name"),
+        accessorKey: "name",
+      },
+      {
+        // Source
+        header: getSortableHeader("Source"),
+        accessorKey: "source",
+        accessorFn: (a) => `${a.source}, p.  ${a.page}`,
+      },
+      {
+        // Time to complete
+        header: getSortableHeader("Approx. Time"),
+        accessorKey: "timeToComplete",
+        accessorFn: (a) => `${a.timeToComplete} hours`,
+      },
+      {
+        // # of Characters
+        header: getSortableHeader("# of Characters"),
+        accessorKey: "numberOfCharacters",
+      },
+      {
+        // Level
+        header: getSortableHeader("Character Level"),
+        accessorKey: "levels",
+      },
+      {
+        // Summary
+        header: "Summary",
+        accessorKey: "summary",
+      },
+    ] as ColumnDef<Adventure>[],
   },
   {
     name: "backgrounds",
@@ -42,6 +88,24 @@ export const collectionsConfig = [
         />
       </svg>
     ),
+    columns: [
+      {
+        // Name
+        header: getSortableHeader("Name"),
+        accessorKey: "name",
+      },
+      {
+        // Source
+        header: getSortableHeader("Source"),
+        accessorKey: "source",
+        accessorFn: (a) => `${a.source}, p.  ${a.page}`,
+      },
+      {
+        // Summary
+        header: "Summary",
+        accessorKey: "summary",
+      },
+    ],
   },
   {
     name: "classes",

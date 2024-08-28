@@ -24,3 +24,26 @@ export type Adventure = Domain & {
 };
 
 export type Background = Domain & {};
+
+export type Class = Domain & {
+  subclass: string;
+};
+
+export type Feat = Domain & {};
+
+export type MagicItem = Domain & {
+  rarity: string;
+};
+
+export type Race = Domain & {};
+
+export type Retainer = Domain & {};
+
+export type Spell = Domain & {
+  schoolOfMagic: string;
+  level: number;
+};
+
+export type Subclass = Domain & {
+  parentClass: string;
+};

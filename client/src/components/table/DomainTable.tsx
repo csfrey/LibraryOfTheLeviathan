@@ -35,7 +35,7 @@ export function getSortableHeader(header: string) {
   );
 }
 
-interface DomainTableProps<TData, TValue> {
+interface DomainTableProps<TData extends Domain, TValue> {
   title: string;
   isFetching: boolean;
   columns: ColumnDef<TData, TValue>[];

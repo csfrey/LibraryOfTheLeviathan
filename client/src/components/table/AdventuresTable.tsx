@@ -1,5 +1,5 @@
 import { Adventure } from "@/components/config/types";
-import { DomainTable, getSortableHeader } from "./DataTable";
+import { DomainTable, getSortableHeader } from "./DomainTable";
 import { ColumnDef } from "@tanstack/react-table";
 
 const AdventuresTable = ({

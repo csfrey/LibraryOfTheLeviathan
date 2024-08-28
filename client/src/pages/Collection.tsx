@@ -1,12 +1,11 @@
 import { API_BASE } from "@/components/config/constants";
 import NavTable from "@/components/NavTable";
-import AdventuresTable from "@/components/table/AdventuresTable";
-import BackgroundsTable from "@/components/table/BackgroundsTable";
 
-import { Adventure, Background } from "@/components/config/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { collectionsConfig } from "@/components/config/collections";
+import { DomainTable } from "@/components/table/DomainTable";
 
 const Collection = () => {
   const { name } = useParams();
@@ -18,26 +17,10 @@ const Collection = () => {
     },
   });
 
-  function getCollectionTable() {
-    switch (name) {
-      case "adventures":
-        return (
-          <AdventuresTable
-            isFetching={query.isFetching}
-            data={(query.data ?? []) as Adventure[]}
-          />
-        );
-      case "backgrounds":
-        return (
-          <BackgroundsTable
-            isFetching={query.isFetching}
-            data={(query.data ?? []) as Background[]}
-          />
-        );
+  const config = collectionsConfig.find((c) => c.name === name);
 
-      default:
-        return <div>Collection not found</div>;
-    }
+  if (!config) {
+    return <div>Collection not found</div>;
   }
 
   return (
@@ -46,7 +29,16 @@ const Collection = () => {
         <NavTable />
       </div>
       <div className="w-[1100px] bg-white rounded p-4">
-        {getCollectionTable()}
+        {config ? (
+          <DomainTable
+            title={config.display}
+            isFetching={query.isFetching}
+            columns={config.columns}
+            data={query.data}
+          />
+        ) : (
+          <div>Collection not found</div>
+        )}
       </div>
     </div>
   );
