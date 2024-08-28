@@ -1,4 +1,4 @@
-import { collectionsConfig } from "./config/collections";
+import { collectionsConfig } from "@/config/collections";
 import {
   Table,
   TableBody,
@@ -7,10 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const NavTable = () => {
-  const location = useLocation();
   return (
     <nav className="mr-4 font-brand">
       <div className="max-h-min rounded bg-white shadow">

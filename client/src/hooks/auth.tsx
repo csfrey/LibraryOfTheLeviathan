@@ -1,90 +1,63 @@
-import { createContext, useEffect, useState, useContext } from "react";
-import { User } from "../components/config/types";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import axios, { AxiosResponse } from "axios";
-import { API_BASE } from "@/components/config/constants";
+import { createContext, useContext, useEffect, useState } from "react";
+import { User } from "@/config/types";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { API_BASE } from "@/config/constants";
 
-const AuthContext = createContext<{
-  user: User | null;
-  authError: string | null;
-  previousPage: string;
+type AuthContextT = {
+  user: User | null; // null user means not logged in
+  isPending: boolean; // true if any of the mutations are pending
+  errorMessage: string | null; // null means no error message
+  previousPage: string; // to store the last page the user was on before auth
   setPreviousPage: Function;
-  getCurrentUser: UseMutationResult<
-    AxiosResponse<any, any>,
-    Error,
-    void,
-    unknown
-  > | null;
-  register: UseMutationResult<
-    AxiosResponse<any, any>,
-    Error,
-    {
-      name: string;
-      email: string;
-      password: string;
-    },
-    unknown
-  > | null;
-  login: UseMutationResult<
-    AxiosResponse<any, any>,
-    Error,
-    {
-      email: string;
-      password: string;
-    },
-    unknown
-  > | null;
-  logout: UseMutationResult<
-    AxiosResponse<any, any>,
-    Error,
-    void,
-    unknown
-  > | null;
-}>({
-  user: null,
-  authError: null,
-  previousPage: "/",
-  setPreviousPage: () => {
-    console.error("Previous page not initialized");
-  },
-  getCurrentUser: null,
-  register: null,
-  login: null,
-  logout: null,
-});
+  register: Function; // callable with (name, email, password)
+  login: Function; // callable with (email, password)
+  logout: Function; // callable
+};
+
+const AuthContext = createContext<AuthContextT | undefined>(undefined);
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error("No AuthContext.Provider found when calling useAuth");
+  }
+  return authContext;
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [previousPage, setPreviousPage] = useState<string>("/");
+  // STATE VARIABLES
   const [user, setUser] = useState<User | null>(null);
-  const [authError, setAuthError] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [previousPage, setPreviousPage] = useState("/");
 
-  // on page load, attempt to get the current user
-  const getCurrentUserMutation = useMutation({
-    mutationKey: ["getCurrentUser"],
+  // MUTATIONS
+  const currentUserMutation = useMutation({
+    mutationKey: ["CurrentUser"],
     mutationFn: async () => {
+      setIsPending(true);
       const response = await axios.get(`${API_BASE}/api/user/current`, {
         withCredentials: true,
       });
-      if (response.status === 200) {
-        setUser(response.data as User);
-      } else {
-        setUser(null);
-      }
-
       return response.data;
+    },
+    onMutate: () => {
+      setIsPending(true);
+    },
+    onSuccess: (data: User) => {
+      setUser(data);
+    },
+    onError: () => {
+      setUser(null);
+    },
+    onSettled: () => {
+      setIsPending(false);
     },
   });
 
-  /**
-   * Will automatically log in with the same credentials after
-   * successful registration.
-   */
   const registerMutation = useMutation({
-    mutationKey: ["register"],
+    mutationKey: ["Register"],
     mutationFn: async ({
       name,
       email,
@@ -94,32 +67,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email: string;
       password: string;
     }) => {
-      const response = await axios.post(`${API_BASE}/api/user/register`, {
+      const result = await axios.post(`${API_BASE}/api/user/register`, {
         name,
         email,
         password,
       });
-      return response.data;
+      return result.data;
     },
-    onSuccess: async (data, values) => {
-      loginMutation.mutate({
-        email: values.email,
-        password: values.password,
+    onMutate: () => {
+      setIsPending(true);
+    },
+    onSuccess: async (_, { email, password }) => {
+      setErrorMessage(null);
+      await loginMutation.mutate({
+        email,
+        password,
       });
-      setAuthError(null);
-    },
-    onError: (error: any) => {
-      setAuthError(error.response.data);
     },
   });
 
-  /**
-   * Will automatically redirect to the previous page if set
-   * with setPreviousPage. Otherwise will automatically redirect
-   * to "/"
-   */
   const loginMutation = useMutation({
-    mutationKey: ["login"],
+    mutationKey: ["Login"],
     mutationFn: async ({
       email,
       password,
@@ -127,7 +95,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email: string;
       password: string;
     }) => {
-      const response = axios.post(
+      setIsPending(true);
+      const response = await axios.post(
         `${API_BASE}/api/user/login`,
         {
           email,
@@ -137,50 +106,66 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           withCredentials: true,
         }
       );
-      return response;
+      return response.data;
     },
-    onSuccess: () => {
-      getCurrentUserMutation.mutate();
-      setAuthError(null);
+    onMutate: () => {
+      setIsPending(true);
+      setErrorMessage(null);
+    },
+    onSuccess: async () => {
+      setErrorMessage(null);
+      await currentUserMutation.mutate();
       window.location.href = previousPage;
     },
     onError: (error: any) => {
-      setAuthError(error.response.data);
+      setErrorMessage(error.response.data);
+      setUser(null);
+    },
+    onSettled: () => {
+      setIsPending(false);
     },
   });
 
   const logoutMutation = useMutation({
-    mutationKey: ["logout"],
-    mutationFn: () => {
-      const response = axios.post(
-        `${API_BASE}/api/user/logout`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      return response;
+    mutationKey: ["Logout"],
+    mutationFn: async () => {
+      // TODO: change to post if this breaks
+      const response = await axios.get(`${API_BASE}/api/user/logout`, {
+        withCredentials: true,
+      });
+      return response.data;
+    },
+    onMutate: () => {
+      setIsPending(true);
     },
     onSuccess: () => {
+      setErrorMessage(null);
       setUser(null);
+    },
+    onError: (error: any) => {
+      setErrorMessage(error.response.data);
+    },
+    onSettled: () => {
+      setIsPending(false);
     },
   });
 
+  // EFFECTS
   useEffect(() => {
-    getCurrentUserMutation.mutate();
+    currentUserMutation.mutate();
   }, []);
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        authError,
+        isPending,
+        errorMessage,
         previousPage,
         setPreviousPage,
-        getCurrentUser: getCurrentUserMutation,
-        register: registerMutation,
-        login: loginMutation,
-        logout: logoutMutation,
+        register: registerMutation.mutate,
+        login: loginMutation.mutate,
+        logout: logoutMutation.mutate,
       }}
     >
       {children}

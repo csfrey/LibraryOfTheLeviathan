@@ -1,8 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { CircleLoader } from "react-spinners";
 import axios from "axios";
-import { useState } from "react";
-import { API_BASE } from "@/components/config/constants";
+import { useEffect, useState } from "react";
+import { API_BASE } from "@/config/constants";
+import { useAuth } from "@/hooks/auth";
+import { useNavigate } from "react-router-dom";
 
 const UserRow = ({ user, onError }: { user: any; onError: Function }) => {
   const [notSaved, setNotSaved] = useState(false);
@@ -94,6 +96,8 @@ const UserRow = ({ user, onError }: { user: any; onError: Function }) => {
 };
 
 const AdminConsole = () => {
+  const { user, isPending } = useAuth();
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const usersQuery = useQuery({
     queryKey: ["users"],
@@ -104,6 +108,12 @@ const AdminConsole = () => {
       return results.data;
     },
   });
+
+  useEffect(() => {
+    if (!isPending && !user) {
+      navigate("/not-authorized");
+    }
+  }, [user]);
 
   if (usersQuery.isFetching) {
     return (

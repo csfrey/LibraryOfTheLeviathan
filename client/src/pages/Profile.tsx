@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/auth";
+
 import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import axios from "axios";
-import { API_BASE } from "@/components/config/constants";
+import { API_BASE } from "@/config/constants";
+import { useAuth } from "@/hooks/auth";
 
 const Profile = () => {
   const [passwordMessageState, setPasswordMessageState] = useState("");
-
   const navigate = useNavigate();
-  const { user, getCurrentUser } = useAuth();
+  const { user, isPending } = useAuth();
 
   const changePassword = useMutation({
     mutationKey: ["changePassword"],
@@ -52,15 +52,73 @@ const Profile = () => {
     },
   });
 
-  if (!getCurrentUser?.isPending && !user) {
-    navigate("/");
-  }
+  useEffect(() => {
+    if (!isPending && !user) {
+      navigate("/not-authorized");
+    }
+  }, [user]);
 
   const passwordMessage = changePassword.isPending
     ? "Updating..."
     : changePassword.isError
     ? "Password is incorrect"
     : passwordMessageState;
+
+  const form = (
+    <form
+      onSubmit={changePasswordForm.handleSubmit}
+      className="flex flex-col gap-4 px-4"
+    >
+      <div className="flex flex-col">
+        <label htmlFor="password" className="font-brand">
+          Current Password
+        </label>
+        <input
+          id="currentPassword"
+          name="currentPassword"
+          type="password"
+          className="border-2 border-gray-200 rounded p-1"
+          onChange={changePasswordForm.handleChange}
+          value={changePasswordForm.values.currentPassword}
+        />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="password" className="font-brand">
+          New Password
+        </label>
+        <input
+          id="newPassword"
+          name="newPassword"
+          type="password"
+          className="border-2 border-gray-200 rounded p-1"
+          onChange={changePasswordForm.handleChange}
+          value={changePasswordForm.values.newPassword}
+        />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="password" className="font-brand">
+          Confirm New Password
+        </label>
+        <input
+          id="confirmNewPassword"
+          name="confirmNewPassword"
+          type="password"
+          className="border-2 border-gray-200 rounded p-1"
+          onChange={changePasswordForm.handleChange}
+          value={changePasswordForm.values.confirmNewPassword}
+        />
+      </div>
+      <div className="flex items-center gap-2">
+        <button
+          type="submit"
+          className="border py-2 px-4 rounded shadow hover:shadow-md"
+        >
+          Save
+        </button>
+        <div className="text-red-500">{passwordMessage}</div>
+      </div>
+    </form>
+  );
 
   return (
     <div className="flex justify-center">
@@ -70,59 +128,7 @@ const Profile = () => {
         </h2>
         <div className="border border-grey-50 my-2"></div>
         <h3 className="font-brand text-xl mb-2">Password Update</h3>
-        <form
-          onSubmit={changePasswordForm.handleSubmit}
-          className="flex flex-col gap-4 px-4"
-        >
-          <div className="flex flex-col">
-            <label htmlFor="password" className="font-brand">
-              Current Password
-            </label>
-            <input
-              id="currentPassword"
-              name="currentPassword"
-              type="password"
-              className="border-2 border-gray-200 rounded p-1"
-              onChange={changePasswordForm.handleChange}
-              value={changePasswordForm.values.currentPassword}
-            />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="password" className="font-brand">
-              New Password
-            </label>
-            <input
-              id="newPassword"
-              name="newPassword"
-              type="password"
-              className="border-2 border-gray-200 rounded p-1"
-              onChange={changePasswordForm.handleChange}
-              value={changePasswordForm.values.newPassword}
-            />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="password" className="font-brand">
-              Confirm New Password
-            </label>
-            <input
-              id="confirmNewPassword"
-              name="confirmNewPassword"
-              type="password"
-              className="border-2 border-gray-200 rounded p-1"
-              onChange={changePasswordForm.handleChange}
-              value={changePasswordForm.values.confirmNewPassword}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="submit"
-              className="border py-2 px-4 rounded shadow hover:shadow-md"
-            >
-              Save
-            </button>
-            <div className="text-red-500">{passwordMessage}</div>
-          </div>
-        </form>
+        {form}
       </div>
     </div>
   );

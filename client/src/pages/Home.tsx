@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { collectionsConfig } from "@/components/config/collections";
+import { collectionsConfig } from "@/config/collections";
 
 const Home = () => {
   return (

@@ -1,4 +1,3 @@
-import { API_BASE } from "@/components/config/constants";
 import NavTable from "@/components/NavTable";
 
 import {
@@ -11,12 +10,13 @@ import {
   Race,
   Spell,
   Subclass,
-} from "@/components/config/types";
+} from "@/config/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { collectionsConfig } from "@/components/config/collections";
+import { collectionsConfig } from "@/config/collections";
 import { DomainTable } from "@/components/table/DomainTable";
+import { API_BASE } from "@/config/constants";
 
 const Collection = () => {
   const { name } = useParams();

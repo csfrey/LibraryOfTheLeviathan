@@ -1,8 +1,6 @@
 import "./App.css";
 import AppLogo from "./assets/AppLogo";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import { useAuth } from "./hooks/auth";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -17,9 +15,12 @@ import {
 } from "./components/ui/dropdown-menu";
 import AdminConsole from "./pages/AdminConsole";
 import Collection from "./pages/Collection";
+import Ingester from "./pages/Ingester";
+import { useAuth } from "@/hooks/auth";
+import Home from "./pages/Home";
 
 function App() {
-  const { user, setPreviousPage, logout } = useAuth();
+  const { user, logout, setPreviousPage } = useAuth();
 
   return (
     <BrowserRouter>
@@ -56,26 +57,41 @@ function App() {
                   <DropdownMenuItem>
                     <Link to="/">Favorites</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <button type="button" onClick={() => logout?.mutate()}>
-                      Log out
-                    </button>
+                  <DropdownMenuItem onClick={() => logout()}>
+                    Log out
                   </DropdownMenuItem>
+                  {user.role === "editor" || user.role === "admin" ? (
+                    <DropdownMenuSeparator />
+                  ) : null}
+                  {user.role === "editor" || user.role === "admin" ? (
+                    <DropdownMenuItem>
+                      <Link to="/ingest">Ingestor</Link>
+                    </DropdownMenuItem>
+                  ) : null}
+                  {user.role === "admin" ? (
+                    <DropdownMenuItem>
+                      <Link to="/admin">Admin Panel</Link>
+                    </DropdownMenuItem>
+                  ) : null}
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <>
                 <Link
                   to="/login"
-                  onClick={() => setPreviousPage(window.location.href)}
                   className="text-red-500 hover:text-red-700"
+                  onClick={() => {
+                    setPreviousPage(window.location.pathname);
+                  }}
                 >
                   sign in
                 </Link>
                 <Link
                   to="/register"
-                  onClick={() => setPreviousPage(window.location.href)}
                   className="text-blue-500 hover:text-blue-700"
+                  onClick={() => {
+                    setPreviousPage(window.location.pathname);
+                  }}
                 >
                   register
                 </Link>
@@ -92,6 +108,7 @@ function App() {
             <Route path="/not-authorized" element={<NotAuthorized />} />
             <Route path="/admin" element={<AdminConsole />} />
             <Route path="/collection/:name" element={<Collection />} />
+            <Route path="/ingest" element={<Ingester />} />
           </Routes>
         </main>
       </div>

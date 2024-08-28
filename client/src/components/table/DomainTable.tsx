@@ -16,12 +16,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Domain } from "@/components/config/types";
+
 import DefaultLoader from "../Loader";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ArrowUpDown } from "lucide-react";
+import { Domain } from "@/config/types";
 
 export function getSortableHeader(header: string) {
   return ({ column }: { column: any }) => (

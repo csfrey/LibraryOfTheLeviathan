@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { getSortableHeader } from "../table/DomainTable";
+
 import {
   Adventure,
   Background,
@@ -12,6 +12,7 @@ import {
   Spell,
   Subclass,
 } from "./types";
+import { getSortableHeader } from "@/components/table/DomainTable";
 
 export type CollectionConfig = {
   name: string;
