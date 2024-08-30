@@ -65,7 +65,7 @@ function App() {
                   ) : null}
                   {user.role === "editor" || user.role === "admin" ? (
                     <DropdownMenuItem>
-                      <Link to="/ingest">Ingestor</Link>
+                      <Link to="/ingest">Ingester</Link>
                     </DropdownMenuItem>
                   ) : null}
                   {user.role === "admin" ? (

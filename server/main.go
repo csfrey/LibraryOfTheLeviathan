@@ -19,7 +19,9 @@ func main() {
 	godotenv.Load()
 	fmt.Println("Environment variables loaded.")
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		BodyLimit: 1024 * 1024 * 1024,
+	})
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
 		AllowOrigins:     "http://localhost:8000, http://localhost:5173",
@@ -39,6 +41,9 @@ func main() {
 
 	routes.DomainRoutes(app)
 	fmt.Println("Domain routes set up.")
+
+	routes.IngestRoutes(app)
+	fmt.Println("Ingest routes set up.")
 
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	app.Listen(fmt.Sprintf(":%d", port))
