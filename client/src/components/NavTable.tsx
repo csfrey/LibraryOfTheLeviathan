@@ -1,4 +1,4 @@
-import { collectionsConfig } from "@/config/collections";
+import { collections } from "@/config/collections";
 import {
   Table,
   TableBody,
@@ -20,10 +20,10 @@ const NavTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {collectionsConfig.map((c) => {
-              const loc = `/collection/${c.name}`;
+            {[...collections].map(([name, c]) => {
+              const loc = `/collection/${c.route}`;
               return (
-                <TableRow className="" key={c.name}>
+                <TableRow className="" key={c.route}>
                   <TableCell className="p-2">
                     <Link to={loc}>
                       <div className="flex items-center gap-2">

@@ -1,3 +1,4 @@
+import { API_BASE } from "@/config/constants";
 import NavTable from "@/components/NavTable";
 
 import {
@@ -14,21 +15,24 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { collectionsConfig } from "@/config/collections";
+import { collections } from "@/config/collections";
 import { DomainTable } from "@/components/table/DomainTable";
-import { API_BASE } from "@/config/constants";
 
 const Collection = () => {
-  const { name } = useParams();
+  const { collectionRoute } = useParams();
   const query = useQuery({
-    queryKey: ["collection", name],
+    queryKey: ["collection", collectionRoute],
     queryFn: async () => {
-      const result = await axios.get(`${API_BASE}/api/collection/${name}`);
+      const result = await axios.get(
+        `${API_BASE}/api/collection/${collectionRoute}`
+      );
       return result.data;
     },
   });
 
-  const config = collectionsConfig.find((c) => c.name === name);
+  const config = [...collections].find(
+    ([key, c]) => c.route === collectionRoute
+  )?.[1];
 
   if (!config) {
     return <div>Collection not found</div>;
@@ -37,7 +41,7 @@ const Collection = () => {
   // this is so dumb but it's more efficient than writing 10
   // separate components that do basically the same thing
   let data;
-  switch (name) {
+  switch (collectionRoute) {
     case "adventures":
       data = (query?.data ?? []) as Adventure[];
       break;

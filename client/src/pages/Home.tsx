@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { collectionsConfig } from "@/config/collections";
+import { collections } from "@/config/collections";
 
 const Home = () => {
   return (
@@ -19,19 +19,19 @@ const Home = () => {
       </div>
 
       <div className="grid grid-cols-4 gap-6 text-black font-brand">
-        {collectionsConfig.map((category, i) => (
+        {[...collections].map(([name, c]) => (
           <Link
-            key={category.name}
-            to={`/collection/${category.name}`}
+            key={c.route}
+            to={`/collection/${c.route}`}
             className="p-2 rounded-xl border border-black bg-white h-full drop-shadow shadow hover:shadow-lg"
           >
             <div className="flex mb-4">
               <span className="absolute border-2 border-black bg-white rounded-full p-2 drop-shadow shadow-lg -translate-x-4 -translate-y-4">
-                {category.icon("size-10")}
+                {c.icon("size-10")}
               </span>
-              <h2 className="ml-14 text-3xl">{category.display}</h2>
+              <h2 className="ml-14 text-3xl">{c.display}</h2>
             </div>
-            <p>{category.description}</p>
+            <p>{c.description}</p>
           </Link>
         ))}
       </div>
